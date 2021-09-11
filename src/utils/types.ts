@@ -4,9 +4,10 @@ export type Profile = {
   pub?: string;
   inbox?: string;
   bio?: string;
+  link?: string;
 };
 
-export type PostIdx = {
+export type Idx = {
   date: string;
   pub: string;
 };
@@ -29,7 +30,7 @@ export type Message = {
 
 export type MessageListProps = {
   reactionsRef?: any;
-  posts?: any;
+  filter?: any;
   keys?: any;
   theirKeys?: any;
   epub?: string;

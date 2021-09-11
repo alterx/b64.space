@@ -1,39 +1,60 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import { useGunState } from '@altrx/gundb-react-hooks';
 import { useCore } from '../context/coreContext';
-import { MessageProps } from '../utils/types';
+import { MessageProps, Profile } from '../utils/types';
 
-import { makeStyles, createStyles } from '@material-ui/styles';
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import ShareIcon from '@material-ui/icons/Share';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Skeleton from '@material-ui/lab/Skeleton';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ShareIcon from '@mui/icons-material/Share';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Skeleton from '@mui/lab/Skeleton';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-    },
-    card: {
-      padding: 5,
-      border: '1px solid  ',
-      margin: 0,
-    },
-    avatar: {
-      backgroundColor: red[500],
-    },
-  })
-);
+const PREFIX = 'Message';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  card: `${PREFIX}-card`,
+  avatar: `${PREFIX}-avatar`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled(Box)(({ theme }) => ({
+  [`& .${classes.root}`]: {
+    width: '100%',
+    minHeight: 198,
+  },
+  [`& .${classes.card}`]: {
+    border: '1px solid ',
+    borderTop: 'none',
+    maxWidth: '100%',
+    margin: 0,
+    minHeight: 198,
+    borderRadius: 0,
+  },
+  [`& .${classes.avatar}`]: {
+    backgroundColor: red[500],
+  },
+}));
+
+const Name = ({ pub }: { pub: string }) => {
+  const { get364node } = useCore();
+  const profileRef = get364node('profile', false, pub);
+  const { fields: profile } = useGunState<Profile>(profileRef);
+  return (
+    <Typography variant="h6">{profile?.name ? profile.name : ''}</Typography>
+  );
+};
 
 export const Message = ({
   nodeID,
@@ -43,7 +64,6 @@ export const Message = ({
   theirKeys = {},
   inbox,
 }: MessageProps) => {
-  const classes = useStyles();
   const { sendToInbox } = useCore();
   const { fields = {} } = useGunState<any>(postsRef.get(nodeID));
   const { fields: likes = {} } = useGunState<any>(
@@ -54,8 +74,10 @@ export const Message = ({
   const name = fields?.name ? fields.name : 'Anonymous';
   const { pub, epub } = theirKeys;
 
+  console.log(likes);
+
   return (
-    <>
+    <Root style={{ width: '100%', minHeight: 198 }} padding={0}>
       <Box className={classes.root}>
         <Card className={classes.card} elevation={0}>
           <CardHeader
@@ -89,7 +111,7 @@ export const Message = ({
                   style={{ marginBottom: 6 }}
                 />
               ) : (
-                name
+                <Name pub={name} />
               )
             }
             subheader={
@@ -167,7 +189,7 @@ export const Message = ({
           </CardActions>
         </Card>
       </Box>
-    </>
+    </Root>
   );
 };
 

@@ -1,20 +1,16 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGunState } from '@altrx/gundb-react-hooks';
-import { indexUser, useFetchPosts } from '../utils/feed';
+import { indexUser } from '../utils/feed';
 import { useAuth } from '@altrx/gundb-react-auth';
 import { useCore } from '../context/coreContext';
-import { Profile } from '../utils/types';
+import Grid from '@mui/material/Grid';
 import { MessageList } from './MessageList';
 
-export const PublicProfile: React.FC = () => {
+export const PublicProfile: React.FC<{ profile: any }> = ({ profile }) => {
   const { userId } = useParams();
   const { appKeys: myKeys } = useAuth();
-
-  const [posts, fetchPosts] = useFetchPosts(userId);
   const { get364node } = useCore();
 
-  const profileRef = get364node('profile', false, userId);
   const postsRef = get364node('posts', false, userId);
 
   // my own reactions node
@@ -35,21 +31,12 @@ export const PublicProfile: React.FC = () => {
     return () => unsubscribe && unsubscribe.off();
   }, [feedIndexRef, postsRef, userId]);
 
-  useEffect(() => {
-    if (!posts.length) {
-      fetchPosts(userId);
-    }
-  }, [fetchPosts, posts, userId]);
-
-  const { fields: publicUserProfile } = useGunState<Profile>(profileRef);
-  const { name, epub, pub, inbox } = publicUserProfile;
+  const { epub, pub, inbox } = profile;
 
   return (
-    <div className="main" id="">
-      <h1>This is {name}</h1>
-      <br />
+    <Grid container spacing={3}>
       <MessageList
-        posts={posts}
+        filter={userId}
         reactionsRef={reactionsRef}
         epub={epub}
         pub={pub || userId}
@@ -57,6 +44,6 @@ export const PublicProfile: React.FC = () => {
         theirKeys={{ epub, pub }}
         keys={myKeys}
       />
-    </div>
+    </Grid>
   );
 };

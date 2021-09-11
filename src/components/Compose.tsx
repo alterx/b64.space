@@ -1,33 +1,78 @@
 import { useState } from 'react';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Button from '@material-ui/core/Button';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
-export default function Compose({ onPost }) {
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { Post } from '../utils/types';
+import { useCore } from '../context/coreContext';
+import { useGunCollectionState, useGunState } from '@altrx/gundb-react-hooks';
+import { indexUser, indexPost, useFetchPosts } from '../utils/feed';
+import { styled } from '@mui/material/styles';
+
+import Container from '@mui/material/Container';
+
+const PREFIX = 'Compose';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  textarea: `${PREFIX}-textarea`,
+};
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  [`& .${classes.root}`]: {
+    width: '100%',
+    paddding: 0,
+  },
+  [`& .${classes.textarea}`]: {
+    width: '100%',
+    padding: theme.spacing(1),
+    minHeight: '80px',
+  },
+}));
+
+export default function Compose({ pub }: { pub: string }) {
+  const { get364node } = useCore();
+  const postsRef = get364node('posts');
+  const postsIndexRef = get364node('postsByDate');
+  const { addToSet: addToIndex } = useGunCollectionState<any>(postsIndexRef);
+  const { addToSet } = useGunCollectionState<Post>(postsRef);
   const [post, setPost] = useState('');
 
+  const onAddPostHandler = async (item: Post) => {
+    await addToSet(item, item.createdAt);
+    await addToIndex({ nodeID: item.createdAt }, item.createdAt);
+    indexPost({
+      date: item.createdAt,
+      pub: pub,
+    });
+  };
+
   return (
-    <>
-      <TextareaAutosize
-        maxRows={4}
-        aria-label="maximum height"
-        value={post}
-        onChange={(e) => {
-          setPost(e.target.value);
-        }}
-        placeholder={'Write something...'}
-        style={{ width: 200 }}
-      />
-      <Button
-        onClick={async () => {
-          if (post) {
-            const date = new Date().toISOString();
-            onPost({ content: post, createdAt: date });
-            setPost('');
-          }
-        }}
-      >
-        Post it
-      </Button>
-    </>
+    <Grid item xs={12}>
+      <StyledBox>
+        <TextareaAutosize
+          className={classes.textarea}
+          maxRows={4}
+          aria-label="maximum height"
+          value={post}
+          onChange={(e) => {
+            setPost(e.target.value);
+          }}
+          placeholder={'Write something...'}
+        />
+        <Button
+          onClick={async () => {
+            if (post) {
+              const date = new Date().toISOString();
+              onAddPostHandler({ content: post, createdAt: date, name: pub });
+              setPost('');
+            }
+          }}
+        >
+          Post it
+        </Button>
+      </StyledBox>
+    </Grid>
   );
 }

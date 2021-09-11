@@ -1,7 +1,7 @@
 import { Message } from './types';
 import { useReducer, useEffect, useRef } from 'react';
 import {
-  reducer,
+  nodeReducer,
   debouncedUpdates,
   useIsMounted,
   KeyPair,
@@ -41,16 +41,20 @@ export const prepareUseMyInbox =
   (pair: KeyPair, node: any, SEA: any) =>
   (postsRef: any, notificationsRef: any) => {
     const myInbox = `@${pair.pub}/inbox`;
-    const [collection, dispatch] = useReducer(reducer, {});
+    const [collection, dispatch] = useReducer<any>(nodeReducer, {});
     const handler = useRef<Record<string, any>>(null);
     const isMounted = useIsMounted();
 
     useEffect(() => {
       const debouncedHandlers: any[] = [];
       if (isMounted.current) {
-        const updater = debouncedUpdates((data: any) => {
-          dispatch({ type: 'add', data });
-        }, 1000);
+        const updater = debouncedUpdates(
+          (data: any) => {
+            dispatch({ type: 'add', data });
+          },
+          'object',
+          1000
+        );
         node
           .get(myInbox)
           .map()
