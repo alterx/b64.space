@@ -7,7 +7,7 @@ import {
   prepareIndexUser,
   prepareUseFetchPosts,
   prepareUsePagination,
-  prepareIndexFollowees,
+  prepareIndexUsers,
   init,
 } from '../utils/feed';
 
@@ -26,7 +26,7 @@ type CoreProviderValue = {
   useFetchPosts: Function;
   usePagination: Function;
   indexPost: Function;
-  indexFollowees: Function;
+  indexUsers: Function;
 };
 type ContextValue = undefined | CoreProviderValue;
 
@@ -43,7 +43,7 @@ const CoreProvider: React.FC = (props: any) => {
   const indexUser = prepareIndexUser(api.current);
   const useFetchPosts = prepareUseFetchPosts(api.current);
   const usePagination = prepareUsePagination(useFetchPosts);
-  const indexFollowees = prepareIndexFollowees(api.current);
+  const indexUsers = prepareIndexUsers(api.current);
   const indexPost = api.current.insertIndex;
 
   const useMyInbox = prepareUseMyInbox(appKeys, appGunInstance, sea);
@@ -95,7 +95,7 @@ const CoreProvider: React.FC = (props: any) => {
       useFetchPosts,
       indexPost,
       usePagination,
-      indexFollowees,
+      indexUsers,
     }),
     [
       useMyInbox,
@@ -108,7 +108,7 @@ const CoreProvider: React.FC = (props: any) => {
       useFetchPosts,
       indexPost,
       usePagination,
-      indexFollowees,
+      indexUsers,
     ]
   );
 

@@ -7,6 +7,7 @@ import { PublicProfile } from '../components/PublicProfile';
 import ProfileHeader from '../components/ProfileHeader';
 import { useCore } from '../context/coreContext';
 import { Profile } from '../utils/types';
+import { Typography } from '@mui/material';
 
 export const ProfileView: React.FC = () => {
   const { userId } = useParams<any>();
@@ -42,8 +43,12 @@ export const ProfileView: React.FC = () => {
       />
       {isOwnProfile ? (
         <MyProfile profile={profile} />
-      ) : (
+      ) : !!follows[userId] ? (
         <PublicProfile profile={profile} />
+      ) : (
+        <Typography variant="h5">
+          Follow this user to see their posts.
+        </Typography>
       )}
     </>
   );

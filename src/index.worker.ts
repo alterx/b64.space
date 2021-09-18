@@ -5,6 +5,7 @@ import { SQLiteFS } from 'absurd-sql';
 import IndexedDBBackend from 'absurd-sql/dist/indexeddb-backend';
 import { Idx } from './utils/types';
 import { expose } from 'comlink';
+import { debouncedUpdates } from '@altrx/gundb-react-hooks';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import sqlWasm from '!!file-loader?name=sql-wasm-[contenthash].wasm!@jlongster/sql.js/dist/sql-wasm.wasm';
@@ -113,41 +114,56 @@ async function insertIndex(items: Idx[], table = 'postIdx') {
   stmt.free();
   database.exec('COMMIT');
 
-  console.log('indexed', items);
-
   return true;
 }
 
-// const handlers: any = {};
+const handlers: any = {};
+
+const updater = debouncedUpdates(
+  (data: any) => {
+    const items = Array.from(data).map(([id, item]: any) => item);
+    insertIndex(items);
+  },
+  'array',
+  1000
+);
 
 async function indexFollowees(followeeList: string[]) {
-  console.log('indexFollowees', followeeList);
   for (let i = 0; i < followeeList.length; i++) {
     const pub = followeeList[i];
-    console.log(pub);
     gun
       .get(`~${pub}/364/postsByDate`)
+      .map()
       // eslint-disable-next-line no-loop-func
-      .once(async (data: any, i: any, k: any, e: any) => {
-        const indexes = Object.keys(data)
-          .filter((key) => key !== '_')
-          .map((key: string) => {
-            return { date: key, pub };
-          });
-        await insertIndex(indexes);
-        // if (!handlers[pub]) {
-        //   handlers[pub] = e;
-        // } else {
-        //   handlers[pub].off();
-        // }
+      .on(async (data: any, id: any, k: any, e: any) => {
+        await updater({ id, data: { date: id, pub } });
+        if (!handlers[pub]) {
+          handlers[pub] = e;
+        } else {
+          handlers[pub].off();
+          handlers[pub] = e;
+        }
       });
   }
+}
+
+async function removeFollowee(pub: string, table = 'postIdx') {
+  if (!database) {
+    return [];
+  }
+  const query = `
+    REMOVE FROM ${table}
+    WHERE pub = '${pub}'
+  `;
+  let result = database.exec(query);
+  return result[0]?.values.map(([pub, ref]: any) => ({ pub, date: ref })) || [];
 }
 
 const api = {
   getIndex,
   insertIndex,
   indexFollowees,
+  removeFollowee,
   init,
 };
 

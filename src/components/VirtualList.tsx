@@ -25,6 +25,7 @@ export default function RowVirtualizerDynamic({
   });
 
   useEffect(() => {
+    console.log('virtualizer');
     const [lastItem] = [...rowVirtualizer.virtualItems].reverse();
 
     if (!lastItem) {

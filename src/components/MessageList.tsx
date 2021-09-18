@@ -1,4 +1,4 @@
-import { useEffect, memo } from 'react';
+import { memo } from 'react';
 import { styled } from '@mui/material/styles';
 import { useCore } from '../context/coreContext';
 import { MessageListProps } from '../utils/types';
@@ -45,17 +45,6 @@ export const MessageList = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [posts, hasNextPage, isLoading, loadMore] = usePagination(filter);
-
-  useEffect(() => {
-    // const id = setTimeout(() => {
-    //   loadMore(0);
-    //   console.log(posts);
-    // }, 1000);
-    // if (!posts.length) {
-    //   loadMore();
-    // }
-    // return () => clearTimeout(id);
-  }, []);
 
   const renderRow = ({ date, pub: ipub }: { date: string; pub: string }) => {
     const myMessage = myPub === ipub;

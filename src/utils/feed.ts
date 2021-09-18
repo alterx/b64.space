@@ -10,8 +10,8 @@ export function init() {
   const api = wrap(worker);
   return api;
 }
-export const prepareIndexFollowees = (api: any) => (followees: []) => {
-  api.indexFollowees(followees);
+export const prepareIndexUsers = (api: any) => (users: []) => {
+  api.indexFollowees(users);
 };
 
 export const prepareIndexUser = (api: any) => (pub: string) => {
@@ -59,6 +59,12 @@ export const prepareUsePagination =
         };
       });
     };
+
+    // useEffect(() => {
+    //   if (!items.length) {
+    //     fetchPosts(filter);
+    //   }
+    // }, [fetchPosts, filter, items]);
 
     return [items, hasNextPage, isLoading, loadMore];
   };

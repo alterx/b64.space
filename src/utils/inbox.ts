@@ -23,7 +23,7 @@ const updatePostWithReaction = async (
         },
       });
     } else {
-      console.log('TODO: add comment to post.');
+      // TODO: add comment/follow to post
       postsRef
         .get(postId)
         .get('comments')
@@ -109,7 +109,6 @@ export const prepareUseMyInbox =
 export const prepareSendToInbox =
   (pair: KeyPair, node: any, SEA: any) =>
   (message: Message, pubTo: string, epubTo: string, inbox: string) => {
-    console.log('TODO: add reaction being sent to my posts.');
     return new Promise((resolve, reject) => {
       const { reference, type, postId, from, contents } = message;
       const id = new Date().toISOString();
@@ -133,7 +132,9 @@ export const prepareSendToInbox =
           try {
             node
               .get(inbox)
-              .get(`@${postId}#reactions<?60`)
+              // TODO explore expiration
+              // .get(`@${postId}#reactions<?60`)
+              .get(`@${postId}#reactions`)
               .get(hash)
               .put(payload, (ack: any) =>
                 ack.ok ? resolve(null) : reject(ack.err)
