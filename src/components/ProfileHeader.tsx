@@ -1,9 +1,4 @@
 import { useState, useEffect } from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import CardActionArea from '@mui/material/CardActionArea';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -18,10 +13,16 @@ export default function ProfileHeader({
   profile,
   onName,
   isPublic,
+  showFollow,
+  followed,
+  onFollow,
 }: {
   profile: Profile;
   onName: (profile: Partial<Profile>) => void;
   isPublic: boolean;
+  showFollow: boolean;
+  followed: boolean;
+  onFollow: (unfollow: boolean) => void;
 }) {
   const [newName, setNewName] = useState(profile?.name);
   const [newBio, setNewBio] = useState(profile?.bio);
@@ -48,10 +49,12 @@ export default function ProfileHeader({
     >
       {/* Increase the priority of the hero background image */}
       {
+        // eslint-disable-next-line jsx-a11y/img-redundant-alt
         <img
           style={{ display: 'none' }}
           src={'https://source.unsplash.com/random'}
-          alt={'random image from unsplash'}
+          alt={'A random image from unsplash'}
+          crossOrigin="anonymous"
         />
       }
       <Box
@@ -87,7 +90,6 @@ export default function ProfileHeader({
             <Link variant="subtitle1" href="carlosve.ga">
               carlosve.ga
             </Link>
-
             {edit && !isPublic && (
               <>
                 <TextField
@@ -119,10 +121,8 @@ export default function ProfileHeader({
               <Button
                 size="small"
                 onClick={() => {
-                  if (newName && newBio) {
-                    onName({ name: newName, bio: newBio });
-                    setEdit(false);
-                  }
+                  onName({ name: newName, bio: newBio, link: newLink });
+                  setEdit(false);
                 }}
               >
                 Update
@@ -136,6 +136,16 @@ export default function ProfileHeader({
                 }}
               >
                 Edit Profile
+              </Button>
+            )}
+            {showFollow && (
+              <Button
+                size="small"
+                onClick={() => {
+                  onFollow(followed);
+                }}
+              >
+                {!followed ? 'Follow user' : 'Unfollow user'}
               </Button>
             )}
           </Box>

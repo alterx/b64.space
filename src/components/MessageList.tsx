@@ -1,16 +1,12 @@
-import React from 'react';
+import { useEffect, memo } from 'react';
 import { styled } from '@mui/material/styles';
 import { useCore } from '../context/coreContext';
 import { MessageListProps } from '../utils/types';
 import { Message } from './Message';
 import VirtualList from './VirtualList';
 
-import { usePagination } from '../utils/feed';
-
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import { red } from '@mui/material/colors';
 
 const PREFIX = 'MessageList';
@@ -43,11 +39,23 @@ export const MessageList = ({
   inbox,
   name = 'posts',
 }: MessageListProps) => {
-  const { get364node } = useCore();
+  const { get364node, usePagination } = useCore();
   let postsRef: any;
   const { pub: myPub } = keys;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [posts, hasNextPage, isLoading, loadMore] = usePagination(filter);
+
+  useEffect(() => {
+    // const id = setTimeout(() => {
+    //   loadMore(0);
+    //   console.log(posts);
+    // }, 1000);
+    // if (!posts.length) {
+    //   loadMore();
+    // }
+    // return () => clearTimeout(id);
+  }, []);
 
   const renderRow = ({ date, pub: ipub }: { date: string; pub: string }) => {
     const myMessage = myPub === ipub;
@@ -56,7 +64,6 @@ export const MessageList = ({
     } else {
       postsRef = get364node(name, false, ipub);
     }
-    const key = date + ipub;
     return (
       <>
         {myMessage ? (
@@ -90,4 +97,4 @@ export const MessageList = ({
   );
 };
 
-export default React.memo(MessageList);
+export default memo(MessageList);

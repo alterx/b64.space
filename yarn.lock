@@ -1092,6 +1092,15 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@craco/craco@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@craco/craco/-/craco-6.3.0.tgz#157ff6387dab526390b47b12e890542c7e7c6437"
+  dependencies:
+    cross-spawn "^7.0.0"
+    lodash "^4.17.15"
+    semver "^7.3.2"
+    webpack-merge "^4.2.2"
+
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
@@ -1471,6 +1480,10 @@
     "@types/node" "*"
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
+
+"@jlongster/sql.js@^1.6.7":
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/@jlongster/sql.js/-/sql.js-1.6.7.tgz#f5391db62c25a6ba8a162bdcfed6e3392ef2b40f"
 
 "@mui/core@5.0.0-alpha.46":
   version "5.0.0-alpha.46"
@@ -1873,6 +1886,12 @@
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
 
+"@types/file-loader@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@types/file-loader/-/file-loader-5.0.1.tgz#300b7c729e4f0c523783b865b287e3459135bf22"
+  dependencies:
+    "@types/webpack" "^4"
+
 "@types/glob@^7.1.1":
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.4.tgz#ea59e21d2ee5c517914cb4bc8e4153b99e566672"
@@ -1885,6 +1904,10 @@
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"
   dependencies:
     "@types/node" "*"
+
+"@types/history@*":
+  version "4.7.9"
+  resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.9.tgz#1cfb6d60ef3822c589f18e70f8b12f9a28ce8724"
 
 "@types/html-minifier-terser@^5.0.0":
   version "5.1.2"
@@ -1972,6 +1995,21 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-router-dom@^5.1.9":
+  version "5.1.9"
+  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.1.9.tgz#e8a8f687351ecc8c68bb4161d7e4b9df4994416e"
+  dependencies:
+    "@types/history" "*"
+    "@types/react" "*"
+    "@types/react-router" "*"
+
+"@types/react-router@*":
+  version "5.1.16"
+  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-5.1.16.tgz#f3ba045fb96634e38b21531c482f9aeb37608a99"
+  dependencies:
+    "@types/history" "*"
+    "@types/react" "*"
+
 "@types/react-transition-group@^4.2.0":
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.2.tgz#38890fd9db68bf1f2252b99a942998dc7877c5b3"
@@ -2027,6 +2065,17 @@
     "@types/node" "*"
     "@types/source-list-map" "*"
     source-map "^0.7.3"
+
+"@types/webpack@^4":
+  version "4.41.31"
+  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.41.31.tgz#c35f252a3559ddf9c85c0d8b0b42019025e581aa"
+  dependencies:
+    "@types/node" "*"
+    "@types/tapable" "^1"
+    "@types/uglify-js" "*"
+    "@types/webpack-sources" "*"
+    anymatch "^3.0.0"
+    source-map "^0.6.0"
 
 "@types/webpack@^4.41.8":
   version "4.41.30"
@@ -2288,6 +2337,10 @@
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.5.tgz#c0b678fb32d60fc1219c784d6a826fe385aeb79a"
+
+absurd-sql@^0.0.53:
+  version "0.0.53"
+  resolved "https://registry.yarnpkg.com/absurd-sql/-/absurd-sql-0.0.53.tgz#e8c84cfd4cf32feb539a667f9f7afe4697c15740"
 
 accepts@~1.3.4, accepts@~1.3.5, accepts@~1.3.7:
   version "1.3.7"
@@ -3361,6 +3414,10 @@ combined-stream@^1.0.8:
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
   dependencies:
     delayed-stream "~1.0.0"
+
+comlink@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/comlink/-/comlink-4.3.1.tgz#0c6b9d69bcd293715c907c33fe8fc45aecad13c5"
 
 commander@^2.20.0:
   version "2.20.3"
@@ -6400,10 +6457,6 @@ jsonfile@^6.0.1:
     universalify "^2.0.0"
   optionalDependencies:
     graceful-fs "^4.1.6"
-
-jsstore@^4.3.7:
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/jsstore/-/jsstore-4.3.7.tgz#a7355afd8c42dd6913f246768418e456c5bf8e36"
 
 "jsx-ast-utils@^2.4.1 || ^3.0.0", jsx-ast-utils@^3.1.0:
   version "3.2.0"
@@ -10205,6 +10258,12 @@ webpack-manifest-plugin@2.2.0:
     object.entries "^1.1.0"
     tapable "^1.0.0"
 
+webpack-merge@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.2.2.tgz#a27c52ea783d1398afd2087f547d7b9d2f43634d"
+  dependencies:
+    lodash "^4.17.15"
+
 webpack-sources@^1.1.0, webpack-sources@^1.3.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1, webpack-sources@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.4.3.tgz#eedd8ec0b928fbf1cbfe994e22d2d890f330a933"
@@ -10446,6 +10505,19 @@ worker-farm@^1.7.0:
   resolved "https://registry.yarnpkg.com/worker-farm/-/worker-farm-1.7.0.tgz#26a94c5391bbca926152002f69b84a4bf772e5a8"
   dependencies:
     errno "~0.1.7"
+
+worker-loader@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/worker-loader/-/worker-loader-3.0.8.tgz#5fc5cda4a3d3163d9c274a4e3a811ce8b60dbb37"
+  dependencies:
+    loader-utils "^2.0.0"
+    schema-utils "^3.0.0"
+
+worker-plugin@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/worker-plugin/-/worker-plugin-5.0.1.tgz#bd76d66216a637a893c6a2f6a530f6bbb2bb8016"
+  dependencies:
+    loader-utils "^1.1.0"
 
 worker-rpc@^0.1.0:
   version "0.1.1"

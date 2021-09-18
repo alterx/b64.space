@@ -3,9 +3,9 @@ import { styled } from '@mui/material/styles';
 import { useGunState } from '@altrx/gundb-react-hooks';
 import { useCore } from '../context/coreContext';
 import { MessageProps, Profile } from '../utils/types';
+import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -18,7 +18,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Skeleton from '@mui/lab/Skeleton';
+import Skeleton from '@mui/material/Skeleton';
 
 const PREFIX = 'Message';
 
@@ -28,7 +28,6 @@ const classes = {
   avatar: `${PREFIX}-avatar`,
 };
 
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
 const Root = styled(Box)(({ theme }) => ({
   [`& .${classes.root}`]: {
     width: '100%',
@@ -52,7 +51,9 @@ const Name = ({ pub }: { pub: string }) => {
   const profileRef = get364node('profile', false, pub);
   const { fields: profile } = useGunState<Profile>(profileRef);
   return (
-    <Typography variant="h6">{profile?.name ? profile.name : ''}</Typography>
+    <Typography variant="h6">
+      <Link to={`/profile/${pub}`}>{profile?.name ? profile.name : ''}</Link>
+    </Typography>
   );
 };
 
@@ -73,8 +74,6 @@ export const Message = ({
   const isReady = Object.keys(fields).length > 0;
   const name = fields?.name ? fields.name : 'Anonymous';
   const { pub, epub } = theirKeys;
-
-  console.log(likes);
 
   return (
     <Root style={{ width: '100%', minHeight: 198 }} padding={0}>
@@ -170,9 +169,7 @@ export const Message = ({
                 >
                   {
                     Object.keys(likes || {}).filter((a) => {
-                      if (likes) {
-                        return !!likes[a];
-                      }
+                      return !!likes[a];
                     }).length
                   }
                   {!likes || (likes && !likes[keys?.pub]) ? (

@@ -5,8 +5,10 @@
   "dependencies": {
     "@altrx/gundb-react-auth": "^0.4.0",
     "@altrx/gundb-react-hooks": "^0.9.6",
+    "@craco/craco": "^6.3.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@jlongster/sql.js": "^1.6.7",
     "@mui/icons-material": "^5.0.0-rc.1",
     "@mui/lab": "^5.0.0-alpha.46",
     "@mui/material": "^5.0.0-rc.1",
@@ -17,8 +19,9 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "absurd-sql": "^0.0.53",
+    "comlink": "^4.3.1",
     "gun": "^0.2020.1234",
-    "jsstore": "^4.3.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
@@ -29,10 +32,10 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +56,10 @@
     ]
   },
   "devDependencies": {
-    "express": "^4.17.1"
+    "@types/file-loader": "^5.0.1",
+    "@types/react-router-dom": "^5.1.9",
+    "express": "^4.17.1",
+    "worker-loader": "^3.0.8",
+    "worker-plugin": "^5.0.1"
   }
 }

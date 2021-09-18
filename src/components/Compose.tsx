@@ -6,11 +6,8 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { Post } from '../utils/types';
 import { useCore } from '../context/coreContext';
-import { useGunCollectionState, useGunState } from '@altrx/gundb-react-hooks';
-import { indexUser, indexPost, useFetchPosts } from '../utils/feed';
+import { useGunCollectionState } from '@altrx/gundb-react-hooks';
 import { styled } from '@mui/material/styles';
-
-import Container from '@mui/material/Container';
 
 const PREFIX = 'Compose';
 
@@ -32,20 +29,21 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 export default function Compose({ pub }: { pub: string }) {
-  const { get364node } = useCore();
+  const { get364node, indexPost } = useCore();
   const postsRef = get364node('posts');
   const postsIndexRef = get364node('postsByDate');
   const { addToSet: addToIndex } = useGunCollectionState<any>(postsIndexRef);
   const { addToSet } = useGunCollectionState<Post>(postsRef);
   const [post, setPost] = useState('');
-
   const onAddPostHandler = async (item: Post) => {
     await addToSet(item, item.createdAt);
     await addToIndex({ nodeID: item.createdAt }, item.createdAt);
-    indexPost({
-      date: item.createdAt,
-      pub: pub,
-    });
+    await indexPost([
+      {
+        date: item.createdAt,
+        pub,
+      },
+    ]);
   };
 
   return (

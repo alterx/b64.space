@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { prepareUseMyInbox, prepareSendToInbox } from '../utils/inbox';
 import { useAuth } from '@altrx/gundb-react-auth';
-import { useGunOnNodeUpdated } from '@altrx/gundb-react-hooks';
-import { Message, Post } from '../utils/types';
-import { indexPost } from '../utils/feed';
+import { Message } from '../utils/types';
+import {
+  prepareIndexNotifications,
+  prepareIndexUser,
+  prepareUseFetchPosts,
+  prepareUsePagination,
+  prepareIndexFollowees,
+  init,
+} from '../utils/feed';
 
 type CoreProviderValue = {
   get364node: (name: string, isOwnProfile?: boolean, pub?: string) => any;
@@ -15,15 +21,30 @@ type CoreProviderValue = {
     inbox: string
   ) => Promise<any>;
   appGunInstance: any;
+  indexNotifications: Function;
+  indexUser: Function;
+  useFetchPosts: Function;
+  usePagination: Function;
+  indexPost: Function;
+  indexFollowees: Function;
 };
 type ContextValue = undefined | CoreProviderValue;
 
 const CoreContext = React.createContext<ContextValue>(undefined);
 CoreContext.displayName = 'CoreContext';
 
+const initedApi: any = init();
+
 const CoreProvider: React.FC = (props: any) => {
   const { appKeys, sea, gun, user } = useAuth();
   const appGunInstance = gun.get('364');
+  const api = useRef<any>(initedApi);
+  const indexNotifications = prepareIndexNotifications(api.current);
+  const indexUser = prepareIndexUser(api.current);
+  const useFetchPosts = prepareUseFetchPosts(api.current);
+  const usePagination = prepareUsePagination(useFetchPosts);
+  const indexFollowees = prepareIndexFollowees(api.current);
+  const indexPost = api.current.insertIndex;
 
   const useMyInbox = prepareUseMyInbox(appKeys, appGunInstance, sea);
   const sendToInbox = prepareSendToInbox(appKeys, appGunInstance, sea);
@@ -42,6 +63,13 @@ const CoreProvider: React.FC = (props: any) => {
     [gun, user]
   );
 
+  useEffect(() => {
+    const run = async () => {
+      initedApi.init();
+    };
+    run();
+  }, []);
+
   const initUser = React.useCallback(() => {
     if (!appKeys || !appKeys.pub) {
       return;
@@ -55,10 +83,6 @@ const CoreProvider: React.FC = (props: any) => {
 
   initUser();
 
-  useGunOnNodeUpdated(get364node('feedPostsByDate').map(), {}, (item: Post) => {
-    indexPost({ pub: item.name, date: item.createdAt });
-  });
-
   const value: CoreProviderValue = React.useMemo(
     () => ({
       useMyInbox,
@@ -66,8 +90,26 @@ const CoreProvider: React.FC = (props: any) => {
       appGunInstance,
       get364node,
       get364UserNode,
+      indexNotifications,
+      indexUser,
+      useFetchPosts,
+      indexPost,
+      usePagination,
+      indexFollowees,
     }),
-    [useMyInbox, sendToInbox, appGunInstance, get364node, get364UserNode]
+    [
+      useMyInbox,
+      sendToInbox,
+      appGunInstance,
+      get364node,
+      get364UserNode,
+      indexNotifications,
+      indexUser,
+      useFetchPosts,
+      indexPost,
+      usePagination,
+      indexFollowees,
+    ]
   );
 
   return <CoreContext.Provider value={value} {...props} />;

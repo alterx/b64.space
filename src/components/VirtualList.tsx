@@ -21,6 +21,7 @@ export default function RowVirtualizerDynamic({
     parentRef,
     size: hasNextPage ? rows.length + 1 : rows.length,
     estimateSize: useCallback(() => 198, []),
+    overscan: 10,
   });
 
   useEffect(() => {

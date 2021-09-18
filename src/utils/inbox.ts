@@ -1,10 +1,11 @@
 import { Message } from './types';
-import { useReducer, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   nodeReducer,
   debouncedUpdates,
   useIsMounted,
   KeyPair,
+  useSafeReducer,
 } from '@altrx/gundb-react-hooks';
 
 const updatePostWithReaction = async (
@@ -41,7 +42,7 @@ export const prepareUseMyInbox =
   (pair: KeyPair, node: any, SEA: any) =>
   (postsRef: any, notificationsRef: any) => {
     const myInbox = `@${pair.pub}/inbox`;
-    const [collection, dispatch] = useReducer<any>(nodeReducer, {});
+    const [collection, dispatch] = useSafeReducer<any>(nodeReducer, {});
     const handler = useRef<Record<string, any>>(null);
     const isMounted = useIsMounted();
 

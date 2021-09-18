@@ -1,8 +1,8 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import { GunProvider } from '@altrx/gundb-react-auth';
-import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { amber, deepOrange, grey } from '@mui/material/colors';
+// import { amber, deepOrange, grey } from '@mui/material/colors';
 import { CoreProvider } from './coreContext';
 import Gun from 'gun';
 import sea from 'gun/sea';
@@ -11,38 +11,38 @@ import 'gun/lib/radisk';
 import 'gun/lib/store';
 import 'gun/lib/rindexed';
 
-const getDesignTokens = (mode: any) => ({
-  palette: {
-    mode,
-    primary: {
-      ...amber,
-      ...(mode === 'dark' && {
-        main: amber[300],
-      }),
-    },
-    ...(mode === 'dark' && {
-      background: {
-        default: deepOrange[900],
-        paper: deepOrange[900],
-      },
-    }),
-    text: {
-      ...(mode === 'light'
-        ? {
-            primary: grey[900],
-            secondary: grey[800],
-          }
-        : {
-            primary: '#fff',
-            secondary: grey[500],
-          }),
-    },
-  },
-});
+// const getDesignTokens = (mode: any) => ({
+//   palette: {
+//     mode,
+//     primary: {
+//       ...amber,
+//       ...(mode === 'dark' && {
+//         main: amber[300],
+//       }),
+//     },
+//     ...(mode === 'dark' && {
+//       background: {
+//         default: deepOrange[900],
+//         paper: deepOrange[900],
+//       },
+//     }),
+//     text: {
+//       ...(mode === 'light'
+//         ? {
+//             primary: grey[900],
+//             secondary: grey[800],
+//           }
+//         : {
+//             primary: '#fff',
+//             secondary: grey[500],
+//           }),
+//     },
+//   },
+// });
 
 const asyncFn =
-  (fn) =>
-  (...args) => {
+  (fn: any) =>
+  (...args: any[]) => {
     return new Promise(function (this: any, resolve) {
       resolve(fn.call(this, ...args));
     });
