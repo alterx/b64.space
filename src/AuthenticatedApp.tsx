@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useCore } from './context/coreContext';
 import { MainView } from './views/MainView';
 import { ProfileView } from './views/ProfileView';
+import { PostView } from './views/PostView';
 import { Switch, Route } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import { useAuth } from '@altrx/gundb-react-auth';
@@ -34,6 +35,9 @@ const AuthenticatedApp: React.FC = () => {
             </Route>
             <Route exact path="/profile/:userId">
               <ProfileView />
+            </Route>
+            <Route exact path="/profile/:userId/:postId">
+              <PostView />
             </Route>
           </Switch>
         </Container>

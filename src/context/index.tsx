@@ -60,6 +60,9 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  typography: {
+    fontFamily: ['Poppins'].join(','),
+  },
 });
 
 const AppProviders: React.FC = ({ children }) => {

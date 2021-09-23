@@ -75,6 +75,13 @@ export const Message = ({
   const name = fields?.name ? fields.name : 'Anonymous';
   const { pub, epub } = theirKeys;
 
+  console.log(keys, theirKeys);
+
+  const handleCopyText = () => {
+    const cb = navigator.clipboard;
+    cb.writeText(`http://localhost:3000/profile/${keys?.pub || pub}/${nodeID}`);
+  };
+
   return (
     <Root style={{ width: '100%', minHeight: 198 }} padding={0}>
       <Box className={classes.root}>
@@ -178,7 +185,7 @@ export const Message = ({
                     <FavoriteIcon />
                   )}
                 </IconButton>
-                <IconButton aria-label="share">
+                <IconButton aria-label="share" onClick={handleCopyText}>
                   <ShareIcon />
                 </IconButton>
               </>

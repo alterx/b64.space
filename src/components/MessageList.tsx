@@ -56,7 +56,7 @@ export const MessageList = ({
     return (
       <>
         {myMessage ? (
-          <Message nodeID={date} postsRef={postsRef} />
+          <Message nodeID={date} postsRef={postsRef} keys={keys} />
         ) : (
           <Message
             nodeID={date}
