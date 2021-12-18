@@ -27,6 +27,7 @@ type CoreProviderValue = {
   usePagination: Function;
   indexPost: Function;
   indexUsers: Function;
+  api: any;
 };
 type ContextValue = undefined | CoreProviderValue;
 
@@ -96,6 +97,7 @@ const CoreProvider: React.FC = (props: any) => {
       indexPost,
       usePagination,
       indexUsers,
+      api,
     }),
     [
       useMyInbox,

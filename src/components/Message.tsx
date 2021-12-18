@@ -13,12 +13,14 @@ import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
+import { red, blueGrey } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Skeleton from '@mui/material/Skeleton';
+
+import formatRelative from 'date-fns/formatRelative';
 
 const PREFIX = 'Message';
 
@@ -26,34 +28,86 @@ const classes = {
   root: `${PREFIX}-root`,
   card: `${PREFIX}-card`,
   avatar: `${PREFIX}-avatar`,
+  name: `${PREFIX}-name`,
+  message: `${PREFIX}-message`,
+  date: `${PREFIX}-date`,
+  cardHeader: `${PREFIX}-cardHeader`,
+  cardContent: `${PREFIX}-cardContent`,
+  cardActions: `${PREFIX}-cardActions`,
 };
 
 const Root = styled(Box)(({ theme }) => ({
   [`& .${classes.root}`]: {
     width: '100%',
-    minHeight: 198,
+    minHeight: 121,
   },
   [`& .${classes.card}`]: {
-    border: '1px solid ',
+    border: `1px solid ${blueGrey[300]}`,
     borderTop: 'none',
     maxWidth: '100%',
     margin: 0,
-    minHeight: 198,
+    minHeight: 121,
     borderRadius: 0,
+    padding: theme.spacing(2),
+  },
+  [`& .${classes.cardHeader}`]: {
+    paddingBottom: 0,
+    paddingTop: 0,
+    alignSelf: 'flex-start',
+  },
+  [`& .${classes.cardContent}`]: {
+    paddingBottom: 0,
+    paddingTop: 0,
+
+    alignSelf: 'flex-start',
+  },
+  [`& .${classes.cardActions}`]: {
+    paddingBottom: 0,
+    paddingTop: 0,
+    paddingLeft: theme.spacing(9),
   },
   [`& .${classes.avatar}`]: {
     backgroundColor: red[500],
   },
+  [`& .${classes.name}`]: {
+    textDecoration: 'none',
+    color: 'white',
+    fontSize: 14,
+  },
+  [`& .${classes.date}`]: {
+    textDecoration: 'none',
+    color: blueGrey[300],
+    fontSize: 11,
+  },
+  [`& .${classes.message}`]: {
+    textDecoration: 'none',
+    color: 'white',
+    fontSize: 12,
+    // fontFamily: 'Roboto',
+    paddingLeft: theme.spacing(7),
+  },
 }));
 
-const Name = ({ pub }: { pub: string }) => {
+const Name = ({ pub, createdAt }: { pub: string; createdAt: string }) => {
   const { get364node } = useCore();
   const profileRef = get364node('profile', false, pub);
   const { fields: profile } = useGunState<Profile>(profileRef);
   return (
-    <Typography variant="h6">
-      <Link to={`/profile/${pub}`}>{profile?.name ? profile.name : ''}</Link>
-    </Typography>
+    <>
+      <Typography variant="h6">
+        <Link className={classes.name} to={`/profile/${pub}`}>
+          {profile?.name ? profile.name : ''}
+        </Link>
+
+        <Typography
+          variant="subtitle1"
+          className={classes.date}
+          component="span"
+        >
+          {` - ${formatRelative(new Date(createdAt), new Date())}`}
+        </Typography>
+      </Typography>
+    </>
   );
 };
 
@@ -75,18 +129,20 @@ export const Message = ({
   const name = fields?.name ? fields.name : 'Anonymous';
   const { pub, epub } = theirKeys;
 
-  console.log(keys, theirKeys);
-
   const handleCopyText = () => {
     const cb = navigator.clipboard;
     cb.writeText(`http://localhost:3000/profile/${keys?.pub || pub}/${nodeID}`);
   };
 
   return (
-    <Root style={{ width: '100%', minHeight: 198 }} padding={0}>
+    <Root style={{ width: '100%', minHeight: 121 }} padding={0}>
       <Box className={classes.root}>
         <Card className={classes.card} elevation={0}>
           <CardHeader
+            className={classes.cardHeader}
+            classes={{
+              content: classes.cardContent,
+            }}
             avatar={
               !isReady ? (
                 <Skeleton
@@ -117,18 +173,11 @@ export const Message = ({
                   style={{ marginBottom: 6 }}
                 />
               ) : (
-                <Name pub={name} />
-              )
-            }
-            subheader={
-              !isReady ? (
-                <Skeleton animation="wave" height={10} width="40%" />
-              ) : (
-                new Date(fields?.createdAt).toLocaleString()
+                <Name pub={name} createdAt={fields?.createdAt} />
               )
             }
           />
-          <CardContent>
+          <CardContent className={classes.cardContent}>
             {!isReady ? (
               <>
                 <Skeleton
@@ -139,15 +188,20 @@ export const Message = ({
                 <Skeleton animation="wave" height={10} width="80%" />
               </>
             ) : (
-              <Typography variant="body2" color="textSecondary">
+              <Typography
+                variant="body1"
+                color="textSecondary"
+                className={classes.message}
+              >
                 {fields?.content}
               </Typography>
             )}
           </CardContent>
-          <CardActions disableSpacing>
+          <CardActions disableSpacing className={classes.cardActions}>
             {!isReady ? null : (
               <>
                 <IconButton
+                  style={{ padding: 0, fontSize: 14 }}
                   aria-label="add to favorites"
                   onClick={() => {
                     setTimeout(() => {
@@ -180,13 +234,17 @@ export const Message = ({
                     }).length
                   }
                   {!likes || (likes && !likes[keys?.pub]) ? (
-                    <FavoriteBorderIcon />
+                    <FavoriteBorderIcon fontSize="small" />
                   ) : (
-                    <FavoriteIcon />
+                    <FavoriteIcon fontSize="small" />
                   )}
                 </IconButton>
-                <IconButton aria-label="share" onClick={handleCopyText}>
-                  <ShareIcon />
+                <IconButton
+                  style={{ padding: 0, marginLeft: 6, fontSize: 12 }}
+                  aria-label="share"
+                  onClick={handleCopyText}
+                >
+                  <ShareIcon fontSize="small" />
                 </IconButton>
               </>
             )}

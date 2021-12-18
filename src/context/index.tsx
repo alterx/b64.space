@@ -11,6 +11,8 @@ import 'gun/lib/radisk';
 import 'gun/lib/store';
 import 'gun/lib/rindexed';
 
+import { ToastContextProvider } from './toastContext';
+
 // const getDesignTokens = (mode: any) => ({
 //   palette: {
 //     mode,
@@ -82,7 +84,9 @@ const AppProviders: React.FC = ({ children }) => {
             peers,
           }}
         >
-          <CoreProvider>{children}</CoreProvider>
+          <CoreProvider>
+            <ToastContextProvider>{children}</ToastContextProvider>
+          </CoreProvider>
         </GunProvider>
       </Router>
     </ThemeProvider>

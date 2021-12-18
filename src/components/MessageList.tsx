@@ -1,13 +1,18 @@
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { useCore } from '../context/coreContext';
 import { MessageListProps } from '../utils/types';
+import {
+  useGunOnNodeUpdated,
+  debouncedUpdates,
+} from '@altrx/gundb-react-hooks';
 import { Message } from './Message';
 import VirtualList from './VirtualList';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { red } from '@mui/material/colors';
+import { useAuth } from '@altrx/gundb-react-auth';
 
 const PREFIX = 'MessageList';
 
@@ -42,9 +47,27 @@ export const MessageList = ({
   const { get364node, usePagination } = useCore();
   let postsRef: any;
   const { pub: myPub } = keys;
+  const { appKeys } = useAuth();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [posts, hasNextPage, isLoading, loadMore] = usePagination(filter);
+  const [posts, hasNextPage, isLoading, loadMore, reset] =
+    usePagination(filter);
+
+  const postsIndexRef = get364node('postsByDate');
+  const updater = useRef(
+    debouncedUpdates(
+      () => {
+        reset();
+      },
+      'object',
+      1000
+    )
+  );
+
+  // useGunOnNodeUpdated(postsIndexRef.map(), { appKeys }, (update: any) => {
+  //   console.log(update);
+  //   // updater?.current(update);
+  // });
 
   const renderRow = ({ date, pub: ipub }: { date: string; pub: string }) => {
     const myMessage = myPub === ipub;

@@ -28,8 +28,14 @@ const StyledBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-export default function Compose({ pub }: { pub: string }) {
-  const { get364node, indexPost } = useCore();
+export default function Compose({
+  pub,
+  isMain,
+}: {
+  pub: string;
+  isMain?: boolean;
+}) {
+  const { get364node, indexPost, api } = useCore();
   const postsRef = get364node('posts');
   const postsIndexRef = get364node('postsByDate');
   const { addToSet: addToIndex } = useGunCollectionState<any>(postsIndexRef);

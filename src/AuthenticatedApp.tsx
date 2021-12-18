@@ -3,7 +3,7 @@ import { useCore } from './context/coreContext';
 import { MainView } from './views/MainView';
 import { ProfileView } from './views/ProfileView';
 import { PostView } from './views/PostView';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import { useAuth } from '@altrx/gundb-react-auth';
 import Box from '@mui/material/Box';
@@ -28,18 +28,15 @@ const AuthenticatedApp: React.FC = () => {
   return (
     <Container maxWidth="xl">
       <Box mt={2}>
-        <Container style={{ maxWidth: 700 }}>
-          <Switch>
-            <Route exact path="/">
-              <MainView />
-            </Route>
-            <Route exact path="/profile/:userId">
-              <ProfileView />
-            </Route>
-            <Route exact path="/profile/:userId/:postId">
-              <PostView />
-            </Route>
-          </Switch>
+        <Container>
+          <Routes>
+            <Route path="/" element={<MainView />}></Route>
+            <Route path="/profile/:userId" element={<ProfileView />}></Route>
+            <Route
+              path="/profile/:userId/:postId"
+              element={<PostView />}
+            ></Route>
+          </Routes>
         </Container>
       </Box>
     </Container>

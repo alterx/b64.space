@@ -15,24 +15,25 @@ export default function RowVirtualizerDynamic({
   isLoading: any;
   fetchMore: any;
 }) {
+  //console.log(rows);
   const parentRef = useRef();
 
   const rowVirtualizer = useVirtual({
     parentRef,
     size: hasNextPage ? rows.length + 1 : rows.length,
-    estimateSize: useCallback(() => 198, []),
+    estimateSize: useCallback(() => 121, []),
     overscan: 10,
   });
 
   useEffect(() => {
-    console.log('virtualizer');
+    console.log('paginate');
     const [lastItem] = [...rowVirtualizer.virtualItems].reverse();
 
     if (!lastItem) {
       return;
     }
 
-    if (lastItem.index === rows.length - 1 && hasNextPage && !isLoading) {
+    if (hasNextPage && !isLoading) {
       fetchMore();
     }
   }, [
@@ -51,6 +52,8 @@ export default function RowVirtualizerDynamic({
         style={{
           height: 500,
           overflowY: 'scroll',
+          borderTop: '1px solid',
+          width: '100%',
         }}
       >
         <Box

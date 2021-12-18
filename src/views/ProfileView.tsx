@@ -8,9 +8,10 @@ import ProfileHeader from '../components/ProfileHeader';
 import { useCore } from '../context/coreContext';
 import { Profile } from '../utils/types';
 import { Typography } from '@mui/material';
+import Compose from '../components/Compose';
 
 export const ProfileView: React.FC = () => {
-  const { userId } = useParams<any>();
+  const { userId = '' } = useParams<any>();
   const { appKeys } = useAuth();
   const { get364node } = useCore();
   const isOwnProfile = appKeys && appKeys.pub && userId === appKeys.pub;
@@ -41,6 +42,8 @@ export const ProfileView: React.FC = () => {
         showFollow={!isOwnProfile}
         onFollow={onFollowHandler}
       />
+
+      <Compose pub={appKeys.pub} />
       {isOwnProfile ? (
         <MyProfile profile={profile} />
       ) : !!follows[userId] ? (

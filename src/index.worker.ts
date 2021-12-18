@@ -8,7 +8,7 @@ import { expose } from 'comlink';
 import { debouncedUpdates } from '@altrx/gundb-react-hooks';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import sqlWasm from '!!file-loader?name=sql-wasm-[contenthash].wasm!@jlongster/sql.js/dist/sql-wasm.wasm';
+import sqlWasm from '@jlongster/sql.js/dist/sql-wasm.wasm?url';
 
 export default {} as typeof Worker & { new (): Worker };
 
