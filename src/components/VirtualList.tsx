@@ -28,7 +28,7 @@ function RowVirtualizerDynamic({
   const parentRef = useRef<HTMLDivElement>(null);
   const parentRef2 = useRef<HTMLDivElement>(null);
   const rows = items ? items?.pages.flatMap((d: any) => d.posts) : [];
-  const totalItems = rows?.length || 0; //rows[0] ? rows[0].total : 0;
+  const totalItems = rows?.length || 0;
   const [askForMore, setAskForMore] = useState(false);
 
   const rowVirtualizer = useVirtualizer({

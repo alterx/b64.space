@@ -13,7 +13,7 @@ import Compose from '../components/Compose';
 export const ProfileView: FC = () => {
   const { userId = '' } = useParams<any>();
   const { appKeys } = useAuth();
-  const { get364node } = useCore();
+  const { get364node, indexUser } = useCore();
   const isOwnProfile = appKeys && appKeys.pub && userId === appKeys.pub;
 
   const profileRef = get364node('profile', isOwnProfile, userId);
@@ -42,14 +42,21 @@ export const ProfileView: FC = () => {
         showFollow={!isOwnProfile}
         onFollow={onFollowHandler}
       />
-
-      <Compose pub={appKeys.pub} />
       {isOwnProfile ? (
-        <MyProfile profile={profile} />
+        <>
+          <Compose pub={appKeys.pub} />
+          <MyProfile profile={profile} />
+        </>
       ) : !!follows[userId] ? (
         <PublicProfile profile={profile} />
       ) : (
-        <Typography variant="h5">
+        <Typography
+          variant="h5"
+          style={{
+            textAlign: 'center',
+            width: '100%',
+          }}
+        >
           Follow this user to see their posts.
         </Typography>
       )}

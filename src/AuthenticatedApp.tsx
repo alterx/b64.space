@@ -18,6 +18,7 @@ const AuthenticatedApp: FC = () => {
   const { fields: followees } = useGunState<any>(get364node('followees'));
 
   useEffect(() => {
+    delete followees['_'];
     indexUsers([
       ...Object.keys(followees).filter((k) => !!followees[k]),
       appKeys.pub,

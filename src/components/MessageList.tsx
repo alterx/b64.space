@@ -61,19 +61,19 @@ export const MessageList = ({
   ] = usePagination(filter);
 
   const postsIndexRef = get364node('postsByDate');
-  // const updater = useRef(
-  //   debouncedUpdates(
-  //     () => {
-  //       reset();
-  //     },
-  //     'object',
-  //     1000
-  //   )
-  // );
+  const updater = useRef(
+    debouncedUpdates(
+      () => {
+        reset();
+      },
+      'object',
+      1000
+    )
+  );
 
-  // useGunOnNodeUpdated(postsIndexRef.map(), { appKeys }, (update: any) => {
-  //   updater?.current(update);
-  // });
+  useGunOnNodeUpdated(postsIndexRef.map(), { appKeys }, (update: any) => {
+    updater?.current(update);
+  });
 
   const renderRow = ({ date, pub: ipub }: { date: string; pub: string }) => {
     const myMessage = myPub === ipub;
