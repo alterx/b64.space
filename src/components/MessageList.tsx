@@ -48,25 +48,31 @@ export const MessageList = ({
   let postsRef: any;
   const { pub: myPub } = keys;
   const { appKeys } = useAuth();
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [posts, hasNextPage, isLoading, loadMore, reset] =
-    usePagination(filter);
+  const [
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    reset,
+  ] = usePagination(filter);
 
   const postsIndexRef = get364node('postsByDate');
-  const updater = useRef(
-    debouncedUpdates(
-      () => {
-        reset();
-      },
-      'object',
-      1000
-    )
-  );
+  // const updater = useRef(
+  //   debouncedUpdates(
+  //     () => {
+  //       reset();
+  //     },
+  //     'object',
+  //     1000
+  //   )
+  // );
 
   // useGunOnNodeUpdated(postsIndexRef.map(), { appKeys }, (update: any) => {
-  //   console.log(update);
-  //   // updater?.current(update);
+  //   updater?.current(update);
   // });
 
   const renderRow = ({ date, pub: ipub }: { date: string; pub: string }) => {
@@ -76,6 +82,11 @@ export const MessageList = ({
     } else {
       postsRef = get364node(name, false, ipub);
     }
+
+    if (!date) {
+      return null;
+    }
+
     return (
       <>
         {myMessage ? (
@@ -98,10 +109,11 @@ export const MessageList = ({
     <Grid item xs={12}>
       <StyledList>
         <VirtualList
-          items={posts}
+          items={data}
           renderRow={renderRow}
-          fetchMore={loadMore}
-          isLoading={isLoading}
+          fetchMore={fetchNextPage}
+          isLoading={isFetchingNextPage}
+          isLoadingData={isFetching}
           hasNextPage={hasNextPage}
         />
       </StyledList>

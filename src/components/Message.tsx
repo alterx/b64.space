@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { styled } from '@mui/material/styles';
 import { useGunState } from '@altrx/gundb-react-hooks';
 import { useCore } from '../context/coreContext';
@@ -124,6 +124,9 @@ export const Message = ({
   const { fields: likes = {} } = useGunState<any>(
     postsRef.get(nodeID).get('likes')
   );
+  const likeCount = Object.keys(likes || {}).filter((a) => {
+    return !!likes[a] && typeof likes[a] === 'boolean';
+  }).length;
 
   const isReady = Object.keys(fields).length > 0;
   const name = fields?.name ? fields.name : 'Anonymous';
@@ -228,11 +231,7 @@ export const Message = ({
                     }, 0);
                   }}
                 >
-                  {
-                    Object.keys(likes || {}).filter((a) => {
-                      return !!likes[a];
-                    }).length
-                  }
+                  {likeCount}
                   {!likes || (likes && !likes[keys?.pub]) ? (
                     <FavoriteBorderIcon fontSize="small" />
                   ) : (
@@ -254,5 +253,4 @@ export const Message = ({
     </Root>
   );
 };
-
-export default React.memo(Message);
+export default memo(Message);

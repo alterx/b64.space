@@ -10,6 +10,7 @@ export type Profile = {
 export type Idx = {
   date: string;
   pub: string;
+  total?: number;
 };
 
 export type Post = {

@@ -87,8 +87,8 @@ export default function ProfileHeader({
             <Typography variant="h5" color="inherit" paragraph>
               {profile?.bio}
             </Typography>
-            <Link variant="subtitle1" href="carlosve.ga">
-              carlosve.ga
+            <Link variant="subtitle1" href={profile?.link}>
+              {profile?.link}
             </Link>
             {edit && !isPublic && (
               <>

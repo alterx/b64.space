@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import { useCore } from './context/coreContext';
 import { MainView } from './views/MainView';
 import { ProfileView } from './views/ProfileView';
@@ -9,7 +9,7 @@ import { useAuth } from '@altrx/gundb-react-auth';
 import Box from '@mui/material/Box';
 import { useGunState } from '@altrx/gundb-react-hooks';
 
-const AuthenticatedApp: React.FC = () => {
+const AuthenticatedApp: FC = () => {
   const { get364node, useMyInbox, indexUsers } = useCore();
   const { appKeys } = useAuth();
   const postsRef = get364node('posts');

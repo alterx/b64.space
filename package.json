@@ -8,21 +8,22 @@
   },
   "dependencies": {
     "@altrx/gundb-react-auth": "^0.4.0",
-    "@altrx/gundb-react-hooks": "^0.9.6",
+    "@altrx/gundb-react-hooks": "^0.9.7",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@jlongster/sql.js": "^1.6.7",
     "@mui/icons-material": "^5.2.4",
     "@mui/lab": "^5.0.0-alpha.60",
     "@mui/material": "^5.2.4",
+    "@tanstack/react-query": "^4.0.10",
+    "@tanstack/react-virtual": "3.0.0-beta.17",
     "absurd-sql": "^0.0.53",
     "comlink": "^4.3.1",
     "date-fns": "^2.27.0",
-    "gun": "^0.2020.1235",
+    "gun": "^0.2020.1237",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^6.2.1",
-    "react-virtual": "^2.10.0"
+    "react-router-dom": "^6.2.1"
   },
   "devDependencies": {
     "@types/react": "^17.0.33",
@@ -30,6 +31,7 @@
     "@vitejs/plugin-react": "^1.0.7",
     "express": "^4.17.2",
     "typescript": "^4.4.4",
-    "vite": "^2.7.2"
+    "vite": "^2.7.2",
+    "vite-plugin-rewrite-all": "^1.0.0"
   }
 }

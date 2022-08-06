@@ -96,14 +96,27 @@ async function getIndex(
     LIMIT ${limit}
     OFFSET ${skip}
   `;
+  const count = `
+    SELECT COUNT(pub) FROM ${table}
+    ${pub ? `WHERE pub = '${pub}'` : ''}`;
+
   let result = database.exec(query);
-  return result[0]?.values.map(([pub, ref]: any) => ({ pub, date: ref })) || [];
+  let [countResult] = database.exec(count);
+  const [value] = countResult.values[0];
+  return (
+    result[0]?.values.map(([pub, ref]: any) => ({
+      pub,
+      date: ref,
+      total: value,
+    })) || []
+  );
 }
 
 async function insertIndex(items: Idx[], table = 'postIdx') {
   if (!database) {
     return false;
   }
+
   database.exec('BEGIN TRANSACTION');
   let stmt = database.prepare(
     `INSERT OR REPLACE INTO ${table} (pub, ref) VALUES (?, ?)`

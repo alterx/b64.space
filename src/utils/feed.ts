@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
-import { Idx } from './types';
+import { useEffect, useState } from 'react';
 import { initBackend } from 'absurd-sql/dist/indexeddb-main-thread';
 import Worker from '../index.worker.ts?worker';
 import { wrap } from 'comlink';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 export function init() {
   const worker = new Worker();
@@ -19,64 +19,58 @@ export const prepareIndexUser = (api: any) => (pub: string) => {
 };
 
 export const prepareIndexNotifications = prepareIndexUser;
-const LIMIT = 10;
+export const LIMIT = 10;
 
-export const prepareUseFetchPosts =
-  (api: any) =>
-  (filter?: string): [Idx[], Function] => {
-    const [posts, setPosts] = useState([] as Idx[]);
-    const fetchPosts = useCallback(
-      async (f?: string, limit: number = LIMIT, skip: number = 0) => {
-        const pList = await api.getIndex(filter || f, skip, limit);
-        setPosts(pList as Idx[]);
-        return pList;
+export const prepareUsePagination = (api: any) => (filter?: string) => {
+  const {
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+  } = useInfiniteQuery(
+    ['index'],
+    async ({ pageParam = 0, ...rest }) => {
+      const pList = await api.getIndex(filter, pageParam * LIMIT, LIMIT);
+      const total = pList[0] ? pList[0].total : 0;
+      const newPp = pageParam + 1;
+      return {
+        posts: pList,
+        cursor: total > newPp * LIMIT ? newPp : null,
+        total,
+      };
+    },
+    {
+      getNextPageParam: (lastGroup) => {
+        return lastGroup?.posts?.length >= LIMIT ? lastGroup.cursor : null;
       },
-      [filter]
-    );
+    }
+  );
 
-    useEffect(() => {
-      fetchPosts(filter);
-    }, [fetchPosts, filter]);
-
-    return [posts, fetchPosts];
+  const reset = async () => {
+    refetch({
+      refetchPage: (page: any, index: number) => {
+        //console.log('refetchPage', index === 0, page);
+        return index === 0;
+      },
+    });
   };
 
-export const prepareUsePagination =
-  (useFetchPosts: Function) => (filter?: string) => {
-    const [items, fetchPosts] = useFetchPosts(filter);
-    const [
-      { hasNextPage = items?.length > LIMIT, isLoading = false, _skip = 0 },
-      setPagination,
-    ] = useState<any>({});
+  useEffect(() => {
+    reset();
+  }, []);
 
-    const loadMore = async (f?: string, skip = _skip) => {
-      setPagination((state: any) => {
-        return {
-          ...state,
-          isLoading: true,
-        };
-      });
-      await fetchPosts(filter || f, LIMIT, skip);
-      setPagination((state: any) => {
-        const newState = {
-          ...state,
-          items: [...(state?.items || []), ...items],
-          skip: _skip + LIMIT,
-          hasNextPage: items.length < LIMIT,
-          isLoading: false,
-        };
-        return newState;
-      });
-    };
-
-    const reset = async () => {
-      const posts = await fetchPosts(filter);
-      setPagination({
-        items: posts,
-        _skip: 0,
-        hasNextPage: items.length < LIMIT,
-      });
-      console.log('reset');
-    };
-    return [items, hasNextPage, isLoading, loadMore, reset];
-  };
+  return [
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    reset,
+  ];
+};

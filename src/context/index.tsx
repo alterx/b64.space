@@ -2,8 +2,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { GunProvider } from '@altrx/gundb-react-auth';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-// import { amber, deepOrange, grey } from '@mui/material/colors';
 import { CoreProvider } from './coreContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Gun from 'gun';
 import sea from 'gun/sea';
 import 'gun/lib/radix';
@@ -12,35 +12,6 @@ import 'gun/lib/store';
 import 'gun/lib/rindexed';
 
 import { ToastContextProvider } from './toastContext';
-
-// const getDesignTokens = (mode: any) => ({
-//   palette: {
-//     mode,
-//     primary: {
-//       ...amber,
-//       ...(mode === 'dark' && {
-//         main: amber[300],
-//       }),
-//     },
-//     ...(mode === 'dark' && {
-//       background: {
-//         default: deepOrange[900],
-//         paper: deepOrange[900],
-//       },
-//     }),
-//     text: {
-//       ...(mode === 'light'
-//         ? {
-//             primary: grey[900],
-//             secondary: grey[800],
-//           }
-//         : {
-//             primary: '#fff',
-//             secondary: grey[500],
-//           }),
-//     },
-//   },
-// });
 
 const asyncFn =
   (fn: any) =>
@@ -68,28 +39,31 @@ const darkTheme = createTheme({
 });
 
 const AppProviders: React.FC = ({ children }) => {
+  const queryClient = new QueryClient();
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Router>
-        <GunProvider
-          peers={peers}
-          sea={sea}
-          Gun={Gun}
-          keyFieldName="364Keys"
-          storage={storage}
-          gunOpts={{
-            localStorage: false,
-            radisk: true,
-            peers,
-          }}
-        >
-          <CoreProvider>
-            <ToastContextProvider>{children}</ToastContextProvider>
-          </CoreProvider>
-        </GunProvider>
-      </Router>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Router>
+          <GunProvider
+            peers={peers}
+            sea={sea}
+            Gun={Gun}
+            keyFieldName="364Keys"
+            storage={storage}
+            gunOpts={{
+              localStorage: false,
+              radisk: true,
+              peers,
+            }}
+          >
+            <CoreProvider>
+              <ToastContextProvider>{children}</ToastContextProvider>
+            </CoreProvider>
+          </GunProvider>
+        </Router>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '@altrx/gundb-react-auth';
 import { useGunState } from '@altrx/gundb-react-hooks';
@@ -10,7 +10,7 @@ import { Profile } from '../utils/types';
 import { Typography } from '@mui/material';
 import Compose from '../components/Compose';
 
-export const ProfileView: React.FC = () => {
+export const ProfileView: FC = () => {
   const { userId = '' } = useParams<any>();
   const { appKeys } = useAuth();
   const { get364node } = useCore();

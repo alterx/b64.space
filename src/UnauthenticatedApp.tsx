@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth } from '@altrx/gundb-react-auth';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';

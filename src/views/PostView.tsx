@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '@altrx/gundb-react-auth';
 import { useGunState } from '@altrx/gundb-react-hooks';
@@ -7,7 +7,7 @@ import { useCore } from '../context/coreContext';
 import { Profile } from '../utils/types';
 import Grid from '@mui/material/Grid';
 
-export const PostView: React.FC = () => {
+export const PostView: FC = () => {
   const { userId, postId } = useParams<any>();
   const { appKeys } = useAuth();
   const { get364node } = useCore();

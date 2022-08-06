@@ -1,18 +1,18 @@
-import React from 'react';
+import { lazy, Suspense, FC } from 'react';
 import { useAuth } from '@altrx/gundb-react-auth';
-const AuthenticatedApp = React.lazy(
+const AuthenticatedApp = lazy(
   () => import(/* webpackPrefetch: true */ './AuthenticatedApp')
 );
-const UnauthenticatedApp = React.lazy(() => import('./UnauthenticatedApp'));
+const UnauthenticatedApp = lazy(() => import('./UnauthenticatedApp'));
 
-const App: React.FC = () => {
+const App: FC = () => {
   const { isLoggedIn } = useAuth();
 
   return (
     <section>
-      <React.Suspense fallback={<p>loading...</p>}>
+      <Suspense fallback={<p>loading...</p>}>
         {isLoggedIn ? <AuthenticatedApp /> : <UnauthenticatedApp />}
-      </React.Suspense>
+      </Suspense>
     </section>
   );
 };
