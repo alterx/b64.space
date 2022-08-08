@@ -6,6 +6,7 @@ import {
   useContext,
   FC,
   createContext,
+  useState,
 } from 'react';
 import { prepareUseMyInbox, prepareSendToInbox } from '../utils/inbox';
 import { useAuth } from '@altrx/gundb-react-auth';
@@ -17,6 +18,8 @@ import {
   prepareIndexUsers,
   init,
 } from '../utils/feed';
+import { useGunState } from '@altrx/gundb-react-hooks';
+import { syncManagerInstance } from '../utils/sync';
 
 type CoreProviderValue = {
   get364node: (name: string, isOwnProfile?: boolean, pub?: string) => any;
@@ -34,6 +37,9 @@ type CoreProviderValue = {
   indexPost: Function;
   indexUsers: Function;
   api: any;
+  updateFeed: boolean;
+  setUpdateFeed: (value: boolean) => void;
+  gun: any;
 };
 type ContextValue = undefined | CoreProviderValue;
 
@@ -43,7 +49,9 @@ CoreContext.displayName = 'CoreContext';
 const initedApi: any = init();
 
 const CoreProvider: FC = (props: any) => {
+  const [updateFeed, setUpdateFeed] = useState(false);
   const { appKeys, sea, gun, user } = useAuth();
+
   const appGunInstance = gun.get('364');
   const api = useRef<any>(initedApi);
   const indexNotifications = prepareIndexNotifications(api.current);
@@ -69,6 +77,10 @@ const CoreProvider: FC = (props: any) => {
     [gun, user]
   );
 
+  const syncManager = useRef(syncManagerInstance(gun, indexPost)).current;
+  const { fields: followees } = useGunState<any>(get364node('followees'));
+  const timeoutId = useRef<any>();
+
   useEffect(() => {
     const run = async () => {
       initedApi.init();
@@ -87,6 +99,33 @@ const CoreProvider: FC = (props: any) => {
     });
   }, [appKeys, get364node]);
 
+  useEffect(() => {
+    delete followees['_'];
+    const fw = Object.keys(followees).filter((k) => !!followees[k]);
+
+    if (appKeys && appKeys.pub && Object.keys(fw)?.length) {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      } else {
+        syncManager.indexFollowees(fw, () => {
+          setUpdateFeed(true);
+        });
+      }
+      timeoutId.current = setInterval(() => {
+        syncManager.indexFollowees(fw, () => {
+          setUpdateFeed(true);
+        });
+      }, 1 * 20 * 1000);
+    }
+
+    return () => {
+      if (timeoutId.current) {
+        clearInterval(timeoutId.current);
+      }
+      syncManager.cleanup();
+    };
+  }, [followees]);
+
   initUser();
 
   const value: CoreProviderValue = useMemo(
@@ -102,6 +141,9 @@ const CoreProvider: FC = (props: any) => {
       usePagination,
       indexUsers,
       api,
+      updateFeed,
+      setUpdateFeed,
+      gun,
     }),
     [
       useMyInbox,
@@ -114,6 +156,9 @@ const CoreProvider: FC = (props: any) => {
       indexPost,
       usePagination,
       indexUsers,
+      updateFeed,
+      setUpdateFeed,
+      gun,
     ]
   );
 

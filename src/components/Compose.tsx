@@ -35,7 +35,7 @@ export default function Compose({
   pub: string;
   isMain?: boolean;
 }) {
-  const { get364node, indexPost, api } = useCore();
+  const { get364node, indexPost, setUpdateFeed } = useCore();
   const postsRef = get364node('posts');
   const postsIndexRef = get364node('postsByDate');
   const { addToSet: addToIndex } = useGunCollectionState<any>(postsIndexRef);
@@ -50,6 +50,7 @@ export default function Compose({
         pub,
       },
     ]);
+    setUpdateFeed(true);
   };
 
   return (

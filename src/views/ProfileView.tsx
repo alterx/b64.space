@@ -28,8 +28,9 @@ export const ProfileView: FC = () => {
     put({ name, bio, link });
   };
 
-  const onFollowHandler = (toggleFollow: boolean) => {
-    putFollowee({ [userId]: !toggleFollow });
+  const onFollowHandler = async (toggleFollow: boolean) => {
+    await putFollowee({ [userId]: !toggleFollow });
+    indexUser(userId);
   };
 
   return (

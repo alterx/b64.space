@@ -10,12 +10,12 @@ export function init() {
   const api = wrap(worker);
   return api;
 }
-export const prepareIndexUsers = (api: any) => (users: []) => {
-  api.indexFollowees(users);
+export const prepareIndexUsers = (api: any) => (users: string[]) => {
+  return api.indexFollowees(users);
 };
 
 export const prepareIndexUser = (api: any) => (pub: string) => {
-  api.indexFollowees([pub]);
+  return api.indexFollowees([pub]);
 };
 
 export const prepareIndexNotifications = prepareIndexUser;

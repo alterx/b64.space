@@ -9,17 +9,8 @@ export const PublicProfile: React.FC<{ profile: any }> = ({ profile }) => {
   const { userId } = useParams<any>();
   const { appKeys: myKeys } = useAuth();
   const { get364node } = useCore();
-
   // my own reactions node
   const reactionsRef = get364node('reactions');
-
-  useEffect(() => {
-    // get the posts index in my local
-    // it seems like Gun cannot get new data from inside the worker
-    // TODO do more research on this
-    get364node('postsByDate', false, userId).once(() => {});
-  }, [get364node, userId]);
-
   const { epub, pub, inbox } = profile;
 
   return (

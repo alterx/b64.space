@@ -130,8 +130,9 @@ async function insertIndex(items: Idx[], table = 'postIdx') {
   return true;
 }
 
+// we don't use this since it seems like gun inside the worker cannot communicate with the exterior
+// that means we use it here to read from the same indexeddb
 const handlers: any = {};
-
 const updater = debouncedUpdates(
   (data: any) => {
     const items = Array.from(data).map(([id, item]: any) => item);
@@ -140,7 +141,6 @@ const updater = debouncedUpdates(
   'array',
   1000
 );
-
 async function indexFollowees(followeeList: string[]) {
   for (let i = 0; i < followeeList.length; i++) {
     const pub = followeeList[i];
