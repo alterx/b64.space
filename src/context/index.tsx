@@ -1,5 +1,5 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import { GunProvider } from '@altrx/gundb-react-auth';
+import { AuthProvider } from '@altrx/gundb-react-hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CoreProvider } from './coreContext';
@@ -29,6 +29,14 @@ const storage = {
 
 const peers = ['http://localhost:8765/gun'];
 
+// Kept at module scope so the object identity is stable across renders —
+// v1.0's useGun re-initializes the Gun instance whenever gunOpts changes.
+const gunOpts = {
+  localStorage: false,
+  radisk: true,
+  peers,
+};
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -38,29 +46,24 @@ const darkTheme = createTheme({
   },
 });
 
-const AppProviders: React.FC = ({ children }) => {
+const AppProviders: React.FC<React.PropsWithChildren> = ({ children }) => {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <Router>
-          <GunProvider
-            peers={peers}
+          <AuthProvider
             sea={sea}
             Gun={Gun}
             keyFieldName="364Keys"
             storage={storage}
-            gunOpts={{
-              localStorage: false,
-              radisk: true,
-              peers,
-            }}
+            gunOpts={gunOpts}
           >
             <CoreProvider>
               <ToastContextProvider>{children}</ToastContextProvider>
             </CoreProvider>
-          </GunProvider>
+          </AuthProvider>
         </Router>
       </ThemeProvider>
     </QueryClientProvider>

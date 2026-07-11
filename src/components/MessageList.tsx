@@ -93,7 +93,7 @@ export const MessageList = ({
   };
 
   return (
-    <Grid item xs={12}>
+    <Grid size={12}>
       <StyledList>
         <VirtualList
           items={data}

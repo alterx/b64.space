@@ -88,7 +88,8 @@ function RowVirtualizerDynamic({
           return (
             <Box
               key={idx}
-              ref={virtualRow.measureElement}
+              data-index={virtualRow.index}
+              ref={rowVirtualizer.measureElement}
               style={{
                 position: 'absolute',
                 top: 0,

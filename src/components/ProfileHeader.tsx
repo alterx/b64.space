@@ -68,7 +68,7 @@ export default function ProfileHeader({
         }}
       />
       <Grid container>
-        <Grid item md={6}>
+        <Grid size={{ md: 6 }}>
           <Box
             sx={{
               position: 'relative',
@@ -84,7 +84,7 @@ export default function ProfileHeader({
             >
               {profile?.name}
             </Typography>
-            <Typography variant="h5" color="inherit" paragraph>
+            <Typography variant="h5" color="inherit" sx={{ mb: 2 }}>
               {profile?.bio}
             </Typography>
             <Link variant="subtitle1" href={profile?.link}>

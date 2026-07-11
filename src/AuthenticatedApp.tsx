@@ -5,9 +5,8 @@ import { ProfileView } from './views/ProfileView';
 import { PostView } from './views/PostView';
 import { Route, Routes } from 'react-router-dom';
 import Container from '@mui/material/Container';
-import { useAuth } from '@altrx/gundb-react-auth';
 import Box from '@mui/material/Box';
-import { useGunState } from '@altrx/gundb-react-hooks';
+import { useAuth, useGunState } from '@altrx/gundb-react-hooks';
 
 const AuthenticatedApp: FC = () => {
   const { get364node, useMyInbox } = useCore();
@@ -17,7 +16,7 @@ const AuthenticatedApp: FC = () => {
   useMyInbox(postsRef, notificationsRef);
   return (
     <Container maxWidth="xl">
-      <Box mt={2}>
+      <Box sx={{ mt: 2 }}>
         <Container>
           <Routes>
             <Route path="/" element={<MainView />}></Route>

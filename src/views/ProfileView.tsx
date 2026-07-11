@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '@altrx/gundb-react-auth';
-import { useGunState } from '@altrx/gundb-react-hooks';
+import { useAuth, useGunState, KeyPair } from '@altrx/gundb-react-hooks';
 import { MyProfile } from '../components/MyProfile';
 import { PublicProfile } from '../components/PublicProfile';
 import ProfileHeader from '../components/ProfileHeader';
@@ -12,9 +11,9 @@ import Compose from '../components/Compose';
 
 export const ProfileView: FC = () => {
   const { userId = '' } = useParams<any>();
-  const { appKeys } = useAuth();
+  const appKeys = useAuth().appKeys as KeyPair;
   const { get364node, indexUser } = useCore();
-  const isOwnProfile = appKeys && appKeys.pub && userId === appKeys.pub;
+  const isOwnProfile = !!(appKeys && appKeys.pub && userId === appKeys.pub);
 
   const profileRef = get364node('profile', isOwnProfile, userId);
   const { fields: profile, put } = useGunState<Profile>(profileRef);

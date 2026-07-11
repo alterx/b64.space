@@ -5,11 +5,12 @@ import {
   useMemo,
   useContext,
   FC,
+  PropsWithChildren,
   createContext,
   useState,
 } from 'react';
 import { prepareUseMyInbox, prepareSendToInbox } from '../utils/inbox';
-import { useAuth } from '@altrx/gundb-react-auth';
+import { useAuth, KeyPair } from '@altrx/gundb-react-hooks';
 import { Message } from '../utils/types';
 import {
   prepareIndexNotifications,
@@ -48,9 +49,12 @@ CoreContext.displayName = 'CoreContext';
 
 const initedApi: any = init();
 
-const CoreProvider: FC = (props: any) => {
+const CoreProvider: FC<PropsWithChildren> = (props: any) => {
   const [updateFeed, setUpdateFeed] = useState(false);
-  const { appKeys, sea, gun, user } = useAuth();
+  const { appKeys: rawAppKeys, sea, gun, user } = useAuth();
+  // v1.0 widened appKeys to `string | KeyPair | undefined`; this app only ever
+  // uses KeyPair objects. Narrow once so downstream usage keeps its ergonomics.
+  const appKeys = rawAppKeys as KeyPair;
 
   const appGunInstance = gun.get('364');
   const api = useRef<any>(initedApi);
@@ -63,7 +67,7 @@ const CoreProvider: FC = (props: any) => {
   const useMyInbox = prepareUseMyInbox(appKeys, appGunInstance, sea);
   const sendToInbox = prepareSendToInbox(appKeys, appGunInstance, sea);
   const get364node = useCallback(
-    (name, isOwnProfile = true, pub = '') => {
+    (name: string, isOwnProfile = true, pub = '') => {
       return isOwnProfile
         ? user.get('364').get(name)
         : gun.get(`~${pub}`).get('364').get(name);
@@ -71,7 +75,7 @@ const CoreProvider: FC = (props: any) => {
     [gun, user]
   );
   const get364UserNode = useCallback(
-    (name, isOwnProfile = true, pub = '') => {
+    (name: string, isOwnProfile = true, pub = '') => {
       return isOwnProfile ? user : gun.get(`~${pub}`);
     },
     [gun, user]
@@ -79,7 +83,7 @@ const CoreProvider: FC = (props: any) => {
 
   const syncManager = useRef(syncManagerInstance(gun, indexPost)).current;
   const { fields: followees } = useGunState<any>(get364node('followees'));
-  const timeoutId = useRef<any>();
+  const timeoutId = useRef<any>(undefined);
 
   useEffect(() => {
     const run = async () => {

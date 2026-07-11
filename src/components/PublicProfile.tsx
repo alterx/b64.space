@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useAuth } from '@altrx/gundb-react-auth';
+import { useAuth } from '@altrx/gundb-react-hooks';
 import { useCore } from '../context/coreContext';
 import Grid from '@mui/material/Grid';
 import { MessageList } from './MessageList';

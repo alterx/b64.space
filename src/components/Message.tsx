@@ -20,7 +20,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Skeleton from '@mui/material/Skeleton';
 
-import formatRelative from 'date-fns/formatRelative';
+import { formatRelative } from 'date-fns';
 
 const PREFIX = 'Message';
 
@@ -138,7 +138,7 @@ export const Message = ({
   };
 
   return (
-    <Root style={{ width: '100%', minHeight: 121 }} padding={0}>
+    <Root style={{ width: '100%', minHeight: 121 }} sx={{ p: 0 }}>
       <Box className={classes.root}>
         <Card className={classes.card} elevation={0}>
           <CardHeader

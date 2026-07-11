@@ -1,4 +1,4 @@
-import { useAuth } from '@altrx/gundb-react-auth';
+import { useAuth } from '@altrx/gundb-react-hooks';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -93,9 +93,14 @@ export default function SignInSide() {
   }
 
   return (
-    <StyledGrid container component="main" className={classes.root}>
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+    <StyledGrid container className={classes.root} {...({ component: 'main' } as any)}>
+      <Grid size={{ xs: false, sm: 4, md: 7 }} className={classes.image} />
+      <Grid
+        size={{ xs: 12, sm: 8, md: 5 }}
+        component={Paper}
+        elevation={6}
+        square
+      >
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -139,7 +144,7 @@ export default function SignInSide() {
             >
               Sign up
             </Button>
-            <Box mt={5}>
+            <Box sx={{ mt: 5 }}>
               <Copyright />
             </Box>
           </form>

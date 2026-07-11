@@ -54,7 +54,7 @@ export default function Compose({
   };
 
   return (
-    <Grid item xs={12}>
+    <Grid size={12}>
       <StyledBox>
         <TextareaAutosize
           className={classes.textarea}

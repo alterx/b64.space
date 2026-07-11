@@ -17,7 +17,9 @@ import * as radix from 'gun/lib/radix';
 import * as radisk from 'gun/lib/radisk';
 
 import 'gun/lib/store';
-import * as rindexed from 'gun/lib/rindexed';
+// CommonJS module whose export is the callable store factory — must be a
+// default import so `rindexed()` is callable (a namespace object is not).
+import rindexed from 'gun/lib/rindexed';
 
 declare const self: any;
 var window: any = {

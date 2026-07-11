@@ -1,5 +1,5 @@
 import { lazy, Suspense, FC } from 'react';
-import { useAuth } from '@altrx/gundb-react-auth';
+import { useAuth } from '@altrx/gundb-react-hooks';
 const AuthenticatedApp = lazy(
   () => import(/* webpackPrefetch: true */ './AuthenticatedApp')
 );

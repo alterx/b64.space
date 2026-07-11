@@ -31,9 +31,9 @@ export const prepareUsePagination = (api: any) => (filter?: string) => {
     fetchNextPage,
     hasNextPage,
     refetch,
-  } = useInfiniteQuery(
-    ['index'],
-    async ({ pageParam = 0, ...rest }) => {
+  } = useInfiniteQuery({
+    queryKey: ['index'],
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
       const pList = await api.getIndex(filter, pageParam * LIMIT, LIMIT);
       const total = pList[0] ? pList[0].total : 0;
       const newPp = pageParam + 1;
@@ -43,20 +43,15 @@ export const prepareUsePagination = (api: any) => (filter?: string) => {
         total,
       };
     },
-    {
-      getNextPageParam: (lastGroup) => {
-        return lastGroup?.posts?.length >= LIMIT ? lastGroup.cursor : null;
-      },
-    }
-  );
+    initialPageParam: 0,
+    getNextPageParam: (lastGroup: any) => {
+      return lastGroup?.posts?.length >= LIMIT ? lastGroup.cursor : null;
+    },
+  });
 
+  // react-query v5 removed refetchPage; refetch() re-fetches the loaded pages.
   const reset = async () => {
-    refetch({
-      refetchPage: (page: any, index: number) => {
-        //console.log('refetchPage', index === 0, page);
-        return index === 0;
-      },
-    });
+    refetch();
   };
 
   useEffect(() => {
